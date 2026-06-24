@@ -1,0 +1,12 @@
+[
+    {
+        "name": "iphones",
+        "price": 800000.0,
+        "quantity": 20
+    },
+    {
+        "name": "infinix",
+        "price": 350000.0,
+        "quantity": 40
+    }
+]

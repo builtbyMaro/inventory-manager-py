@@ -3,7 +3,12 @@ from inventory import InventoryManager, Item
 def add_item(inventory: InventoryManager):
     while True:
         try:
-            name = input("Enter Item name: ")
+            name = input("Enter Item name: ").lower()
+            if any(item.name == name for item in inventory.items):
+                print("------------------------")
+                print("This item already exists")
+                print("------------------------")
+                return
             price = float(input("Enter Item price: "))
             quantity = int(input("Enter Item quantity: "))
 
@@ -12,7 +17,7 @@ def add_item(inventory: InventoryManager):
             print("------------------------")
             print("Item added successfully.")
             print("------------------------")
-            break
+            return
         except ValueError:
             print("--------------------------------")
             print("Please enter appropriate values:")
@@ -22,7 +27,7 @@ def add_item(inventory: InventoryManager):
 
 def update_item(inventory: InventoryManager):
     while True:
-        name = input("Enter the name of the item you want to update: ")
+        name = input("Enter the name of the item you want to update: ").lower()
         item_found = False
         for item in inventory.items:
             if item.name == name:
@@ -41,7 +46,7 @@ def update_item(inventory: InventoryManager):
 
                         match choice:
                             case 1:
-                                new_name = input("Enter new item name: ")
+                                new_name = input("Enter new item name: ").lower()
                                 inventory.update_item(item_name=name, name=new_name)
                             case 2:
                                 new_price = float(input("Enter new price: "))
@@ -77,7 +82,7 @@ def update_item(inventory: InventoryManager):
 
 def delete_item(inventory: InventoryManager):
     while True:
-        name = input("Enter name of the item you would like to delete: ")
+        name = input("Enter name of the item you would like to delete: ").lower()
         item_found = False
         for item in inventory.items:
             if item.name == name:
@@ -146,5 +151,4 @@ while is_running:
         print("----------------------")
         print("Please enter 1/2/3/4/5")
         print("----------------------")
-
 
