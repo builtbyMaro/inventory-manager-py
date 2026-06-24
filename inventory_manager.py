@@ -14,9 +14,11 @@ def add_item(inventory: InventoryManager):
             print("------------------------")
             break
         except ValueError:
+            print("--------------------------------")
             print("Please enter appropriate values:")
             print("1. Prices can only be numbers.")
             print("2. Quantities can only be numbers but cannot contain decimal places.")
+            print("-------------------------------")
 
 def update_item(inventory: InventoryManager):
     while True:
@@ -48,21 +50,29 @@ def update_item(inventory: InventoryManager):
                                 new_quantity = int(input("Enter new quantity: "))
                                 inventory.update_item(item_name=name, quantity=new_quantity)
                             case _:
+                                print("-----------------")
                                 print("Please pick 1/2/3")
+                                print("-----------------")
                     except ValueError:
+                        print("--------------------------------")
                         print("Please enter appropriate values:")
                         print("1. Prices can only be numbers.")
                         print("2. Quantities can only be numbers but cannot contain decimal places.")
+                        print("--------------------------------")
 
                     print("------------------------")
                     print("Item updated successfully.")
                     print("------------------------")
                     break
                 except ValueError:
+                    print("-----------------")
                     print("Please pick 1/2/3")
+                    print("-----------------")
             break
         else:
+            print("---------------")
             print("Item not found.")
+            print("---------------")
             break
 
 def delete_item(inventory: InventoryManager):
@@ -74,24 +84,35 @@ def delete_item(inventory: InventoryManager):
                 item_found = True
 
         if item_found:
+            print("------------------------")
             sure = input("Are you sure ? Y/N ").lower()
             if sure == "y":
                 inventory.delete_item(name)
+                print("-------------------------")
                 print("Item deleted successfully")
+                print("-------------------------")
             else:
+                print("----------------")
                 print("Delete cancelled")
+                print("----------------")
                 break
         else:
+            print("--------------")
             print("Item not found")
+            print("--------------")
         break
 
 def view_items(inventory: InventoryManager):
     items = inventory.view_items()
     if not items:
+        print("----------------")
         print("Inventory Empty.")
+        print("----------------")
     else:
         for item in inventory.view_items():
+            print("------------------------")
             print(item)
+            print("------------------------")
 
 is_running = True
 inventory = InventoryManager()
