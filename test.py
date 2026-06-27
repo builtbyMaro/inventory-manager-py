@@ -1,7 +1,9 @@
 from inventory import InventoryManager, Item
 
-phones = InventoryManager("phones")
-laptops = InventoryManager("laptops")
+manager = InventoryManager()
+
+phones = manager.create_inventory("phones")
+laptops = manager.create_inventory("laptops")
 
 item1 = Item("iphone 12 pro", 350000, 26)
 item2 = Item("Samsung S24 ultra", 500000, 18)

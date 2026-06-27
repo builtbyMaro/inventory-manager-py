@@ -3,42 +3,61 @@ from inventory_utils import write_file, read_file
 file_path = "inventory.json"
 
 class InventoryManager:
-    storage_data = read_file(file_path)
 
-    def __init__(self, name):
+    def __init__(self):
+        self.storage_data = read_file(file_path)
+
+    def create_inventory(self, name):
+        new_inventory = Inventory(name, self)
+        self.save_inventory(new_inventory)
+        return new_inventory
+
+    def remove_inventory(self, name):
+        if name in self.storage_data:
+            self.storage_data.pop(name)
+            write_file(file_path, self.storage_data)
+            return True
+        else:
+            return False
+        
+    def get_inventory(self, name):
+        if name in self.storage_data:
+            return [Item.from_dict(item) for item in self.storage_data[name]]
+        else:
+            return []
+
+    def save_inventory(self, inventory):
+        items = [item.to_dict() for item in inventory.items]
+        self.storage_data[inventory.name] = items
+        write_file(file_path, self.storage_data)
+
+class Inventory:
+
+    def __init__(self, name, manager: InventoryManager):
         self.name = name
-        self.items = self._get_items(self.storage_data)
-        self._update_storage_data(self.storage_data)
+        self.manager = manager
+        self.items = manager.get_inventory(self.name)
 
     def add_item(self, item):
         self.items.append(item)
-        self._update_storage_data(self.storage_data)
+        self.manager.save_inventory(self)
 
     def update_item(self, item_name, **kwargs):
         for item in self.items:
             if item.name == item_name:
                 item.update(**kwargs)
-        self._update_storage_data(self.storage_data)
+        self.manager.save_inventory(self)
                 
     def delete_item(self, item_name):
         for item in self.items:
             if item.name == item_name:
                 self.items.remove(item)
-        self._update_storage_data(self.storage_data)
+        self.manager.save_inventory(self)
         
     def view_items(self):
         return self.items
-    
-    def _get_items(self, storage_data):
-        if self.name in storage_data:
-            return [Item.from_dict(item) for item in storage_data[self.name]]
-        else:
-            return []
-    
-    def _update_storage_data(self, storage_data):
-        items = [item.to_dict() for item in self.items]
-        storage_data[self.name] = items
-        write_file(file_path, storage_data)
+
+
 
 class Item:
     def __init__(self, name, price, quantity):
