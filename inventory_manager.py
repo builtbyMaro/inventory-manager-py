@@ -1,146 +1,70 @@
-from inventory import InventoryManager, Item
-
-def add_item(inventory: InventoryManager):
-    while True:
-        try:
-            name = input("Enter Item name: ").lower()
-            if any(item.name == name for item in inventory.items):
-                print("------------------------")
-                print("This item already exists")
-                print("------------------------")
-                return
-            price = float(input("Enter Item price: "))
-            quantity = int(input("Enter Item quantity: "))
-
-            new_item = Item(name, price, quantity)
-            inventory.add_item(new_item)
-            print("------------------------")
-            print("Item added successfully.")
-            print("------------------------")
-            return
-        except ValueError:
-            print("--------------------------------")
-            print("Please enter appropriate values:")
-            print("1. Prices can only be numbers.")
-            print("2. Quantities can only be numbers but cannot contain decimal places.")
-            print("-------------------------------")
-
-def update_item(inventory: InventoryManager):
-    while True:
-        name = input("Enter the name of the item you want to update: ").lower()
-        item_found = False
-        for item in inventory.items:
-            if item.name == name:
-                item_found = True
-        
-        if item_found:
-            while True:
-                try:
-                    print("-------------")
-                    print("1. Name")
-                    print("2. Price")
-                    print("3. Quantity")
-                    choice = int(input("What would you like to update ?"))
-
-                    try:
-
-                        match choice:
-                            case 1:
-                                new_name = input("Enter new item name: ").lower()
-                                inventory.update_item(item_name=name, name=new_name)
-                            case 2:
-                                new_price = float(input("Enter new price: "))
-                                inventory.update_item(item_name=name, price=new_price)
-                            case 3:
-                                new_quantity = int(input("Enter new quantity: "))
-                                inventory.update_item(item_name=name, quantity=new_quantity)
-                            case _:
-                                print("-----------------")
-                                print("Please pick 1/2/3")
-                                print("-----------------")
-                    except ValueError:
-                        print("--------------------------------")
-                        print("Please enter appropriate values:")
-                        print("1. Prices can only be numbers.")
-                        print("2. Quantities can only be numbers but cannot contain decimal places.")
-                        print("--------------------------------")
-
-                    print("------------------------")
-                    print("Item updated successfully.")
-                    print("------------------------")
-                    break
-                except ValueError:
-                    print("-----------------")
-                    print("Please pick 1/2/3")
-                    print("-----------------")
-            break
-        else:
-            print("---------------")
-            print("Item not found.")
-            print("---------------")
-            break
-
-def delete_item(inventory: InventoryManager):
-    while True:
-        name = input("Enter name of the item you would like to delete: ").lower()
-        item_found = False
-        for item in inventory.items:
-            if item.name == name:
-                item_found = True
-
-        if item_found:
-            print("------------------------")
-            sure = input("Are you sure ? Y/N ").lower()
-            if sure == "y":
-                inventory.delete_item(name)
-                print("-------------------------")
-                print("Item deleted successfully")
-                print("-------------------------")
-            else:
-                print("----------------")
-                print("Delete cancelled")
-                print("----------------")
-                break
-        else:
-            print("--------------")
-            print("Item not found")
-            print("--------------")
-        break
-
-def view_items(inventory: InventoryManager):
-    items = inventory.view_items()
-    if not items:
-        print("----------------")
-        print("Inventory Empty.")
-        print("----------------")
-    else:
-        for item in inventory.view_items():
-            print("------------------------")
-            print(item)
-            print("------------------------")
+from inventory import InventoryManager, Inventory, Item
+from inventory_manager_utils import add_inventory, delete_inventory, view_inventories, add_item, update_item, delete_item, view_items
 
 is_running = True
-inventory = InventoryManager()
+current_inventory = None
+manager = InventoryManager()
+
+def inventory_opened(current_inventory):
+    while isinstance(current_inventory, Inventory):
+
+        print(f"=== {current_inventory.name.capitalize()} Inventory ===")
+        print("1. Add new Item")
+        print("2. Update existing item")
+        print("3. Delete an item")
+        print("4. View all items")
+        print("5. Go back to inventory manager")
+        try:
+            choice = int(input("What would you like to do ? "))
+            match choice:
+                case 1:
+                    add_item(current_inventory)
+                case 2:
+                    update_item(current_inventory)
+                case 3:
+                    delete_item(current_inventory)
+                case 4:
+                    view_items(current_inventory)
+                case 5:
+                    current_inventory = None
+                    break
+                case _:
+                    print("----------------------")
+                    print("Please enter 1/2/3/4/5")
+                    print("----------------------")
+        except ValueError:
+            print("----------------------")
+            print("Please enter 1/2/3/4/5")
+            print("----------------------")
+
+
 
 while is_running:
-
     print("=== Inventory Manager ===")
-    print("1. Add new Item")
-    print("2. Update existing item")
-    print("3. Delete an item")
-    print("4. View all items")
+    print("1. Open Inventory")
+    print("2. Add Inventory")
+    print("3. Delete Inventory")
+    print("4. View Inventories")
     print("5. Exit")
     try:
         choice = int(input("What would you like to do ? "))
         match choice:
             case 1:
-                add_item(inventory)
+                user_input = input("Inventory name: ").lower()
+                inventory = manager.open_inventory(user_input)
+                if isinstance(inventory, Inventory):
+                    current_inventory = inventory
+                    inventory_opened(current_inventory)
+                else:
+                    print("----------------------")
+                    print(f"{user_input} doesn't exist")
+                    print("----------------------")
             case 2:
-                update_item(inventory)
+                add_inventory(manager)
             case 3:
-                delete_item(inventory)
+                delete_inventory(manager)
             case 4:
-                view_items(inventory)
+                view_inventories(manager)
             case 5:
                 is_running = False
             case _:

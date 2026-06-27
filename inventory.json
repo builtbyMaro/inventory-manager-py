@@ -1,26 +1,16 @@
 {
-    "phones": [
-        {
-            "name": "iphone 12 pro",
-            "price": 350000,
-            "quantity": 26
-        },
-        {
-            "name": "Samsung S24 ultra",
-            "price": 500000,
-            "quantity": 18
-        }
-    ],
     "laptops": [
         {
-            "name": "Dell latitude",
-            "price": 400000,
-            "quantity": 17
-        },
+            "name": "dell latitude 3400",
+            "price": 350000.0,
+            "quantity": 27
+        }
+    ],
+    "powerbanks": [
         {
-            "name": "Macbook M4",
-            "price": 700000,
-            "quantity": 28
+            "name": "oraimo charge 2",
+            "price": 40000.0,
+            "quantity": 16
         }
     ]
 }
