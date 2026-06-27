@@ -1,12 +1,26 @@
-[
-    {
-        "name": "iphones",
-        "price": 800000.0,
-        "quantity": 20
-    },
-    {
-        "name": "infinix",
-        "price": 350000.0,
-        "quantity": 40
-    }
-]
+{
+    "phones": [
+        {
+            "name": "iphone 12 pro",
+            "price": 350000,
+            "quantity": 26
+        },
+        {
+            "name": "Samsung S24 ultra",
+            "price": 500000,
+            "quantity": 18
+        }
+    ],
+    "laptops": [
+        {
+            "name": "Dell latitude",
+            "price": 400000,
+            "quantity": 17
+        },
+        {
+            "name": "Macbook M4",
+            "price": 700000,
+            "quantity": 28
+        }
+    ]
+}

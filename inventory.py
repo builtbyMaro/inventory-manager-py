@@ -3,28 +3,42 @@ from inventory_utils import write_file, read_file
 file_path = "inventory.json"
 
 class InventoryManager:
-    def __init__(self):
-        self.items = [Item.from_dict(item) for item in read_file(file_path)]
+    storage_data = read_file(file_path)
+
+    def __init__(self, name):
+        self.name = name
+        self.items = self._get_items(self.storage_data)
+        self._update_storage_data(self.storage_data)
 
     def add_item(self, item):
         self.items.append(item)
-        write_file(file_path, [item.to_dict() for item in self.items])
+        self._update_storage_data(self.storage_data)
 
     def update_item(self, item_name, **kwargs):
         for item in self.items:
             if item.name == item_name:
                 item.update(**kwargs)
-        write_file(file_path, [item.to_dict() for item in self.items])
+        self._update_storage_data(self.storage_data)
                 
     def delete_item(self, item_name):
         for item in self.items:
             if item.name == item_name:
                 self.items.remove(item)
-        write_file(file_path, [item.to_dict() for item in self.items])
+        self._update_storage_data(self.storage_data)
         
-    
     def view_items(self):
         return self.items
+    
+    def _get_items(self, storage_data):
+        if self.name in storage_data:
+            return [Item.from_dict(item) for item in storage_data[self.name]]
+        else:
+            return []
+    
+    def _update_storage_data(self, storage_data):
+        items = [item.to_dict() for item in self.items]
+        storage_data[self.name] = items
+        write_file(file_path, storage_data)
 
 class Item:
     def __init__(self, name, price, quantity):
